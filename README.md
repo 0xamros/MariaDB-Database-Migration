@@ -16,7 +16,7 @@ This repository contains an Ansible playbook for migrating three databases from 
 git clone https://github.com/0xamros/MariaDB-Database-Migration.git
 ```
 
-3.  Change to the repository directory:
+2.  Change to the repository directory:
 
 ```
 cd MariaDB-Database-Migration
