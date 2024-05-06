@@ -1,7 +1,7 @@
 
 # MariaDB Database Migration And Hourly Database Backup
 
-# MariaDB Database Migration
+# 1- MariaDB Database Migration
 
 This repository contains an Ansible playbook for migrating three databases from an existing MariaDB instance to three separate Docker containers running MariaDB.
 
@@ -60,7 +60,7 @@ After the playbook completes, you should have three new Docker containers runnin
 -   The playbook allows an empty root password for the MariaDB containers for simplicity. In a production environment, you should set a secure root password.
 -   The playbook mounts the SQL files to the containers' `/docker-entrypoint-initdb.d` directory, which means the data will be lost if the containers are stopped and removed. For persistent data storage, you should configure Docker volumes or bind mounts.
 
-# Hourly Database Backup
+# 2- Hourly Database Backup
 
 For scheduling hourly backups of three MariaDB databases running in Docker containers.
 
