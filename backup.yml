@@ -1,0 +1,14 @@
+- name: Schedule hourly database backup
+  hosts: docker_mig
+  vars:
+    dbs:
+      - db1
+      - db2
+      - db3
+  tasks:
+    - name: Hourly backup job
+      cron:
+        name: "Hourly DB backup {{ item }}"
+        minute: "0"
+        job: "docker exec mariadb_{{ item }} mysqldump -u root --databases {{ item }} > /backup/$(date +\\%Y\\%m\\%d\\%H\\%M\\%S).{{ item }}.sql"
+      loop: "{{ dbs }}"
