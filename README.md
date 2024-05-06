@@ -61,7 +61,7 @@ After the playbook completes, you should have three new Docker containers runnin
 -   The playbook mounts the SQL files to the containers' `/docker-entrypoint-initdb.d` directory, which means the data will be lost if the containers are stopped and removed. For persistent data storage, you should configure Docker volumes or bind mounts.
 
 # 2- Hourly Database Backup
-
+![Screenshot of (crontab -l) command.](cron.jpg)
 For scheduling hourly backups of three MariaDB databases running in Docker containers.
 
 ## Usage
