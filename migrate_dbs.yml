@@ -1,0 +1,35 @@
+- name: migrate databases
+  hosts: docker_mig
+  vars:
+    dbs:
+      - db1
+      - db2
+      - db3
+  tasks:
+    - name: migrate databases  # Task to dump existing databases to SQL files
+      community.mysql.mysql_db:
+        login_user: root
+        login_password: '0123'
+        state: dump  # State to dump the database
+        name: 
+          - "{{ item }}"  # Name of the database to dump
+        target: /tmp/{{ item }}.sql  # Target path to store the dumped SQL file
+        dump_extra_args: "--databases"  # Extra arguments for mysqldump
+      loop: "{{ dbs }}"  # Loop over the list of databases
+
+    - name: create containers  # Task to create new MariaDB containers and import the dumped SQL files
+      community.docker.docker_container:
+        name: mariadb_{{ item }}  # Name of the new MariaDB container
+        env:
+          MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: 'yes'  # Environment variable to allow an empty root password
+        state: started  # Start the container
+        image: "mariadb"  # Docker image to use
+        pull: true  # Pull the latest image
+        volumes:
+          - "/tmp/{{item}}.sql:/docker-entrypoint-initdb.d/{{item}}.sql"  # Mount the dumped SQL file to the container's initdb directory
+        ports:
+          - "330{{ index + 1 }}:3306"  # Map the container's port to the host port
+      loop: "{{ dbs }}"  # Loop over the list of databases
+      loop_control:
+        index_var: index  # Variable to store the loop index
+        extended: true  # Use extended loop syntax to access the loop index
